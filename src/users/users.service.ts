@@ -2,8 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAccountInput } from './dtos/create-account.dto';
+import { LoginInput } from './dtos/login.dto';
 import { User } from './entities/user.entity';
 
+// サービスはデータベース操作に関する作業を担当する
 @Injectable()
 export class UsersService {
   constructor(
@@ -24,6 +26,37 @@ export class UsersService {
       return { ok: true };
     } catch (e) {
       return { ok: false, error: 'アカウント作成に失敗しました。' };
+    }
+  }
+
+  async login({
+    email,
+    password,
+  }: LoginInput): Promise<{ ok: boolean; error?: string; token?: string }> {
+    try {
+      const user = await this.users.findOne({ email });
+      if (!user) {
+        return {
+          ok: false,
+          error: '登録されていないユーザです。',
+        };
+      }
+      const isChecked = await user.checkPassword(password);
+      if (!isChecked) {
+        return {
+          ok: false,
+          error: 'パスワードをもう一度確認してください。',
+        };
+      }
+      return {
+        ok: true,
+        token: 'testestestestest',
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error,
+      };
     }
   }
 }
