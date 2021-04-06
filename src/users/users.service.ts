@@ -16,7 +16,7 @@ import { MailService } from 'src/mail/mail.service';
 
 // サービスはデータベース操作に関する作業を担当する
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
     @InjectRepository(Verification)
