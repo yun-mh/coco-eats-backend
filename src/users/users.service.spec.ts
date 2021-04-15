@@ -68,6 +68,7 @@ describe('UserService', () => {
       password: 'mockmock',
       role: 0,
     };
+
     it('should fail if user exists', async () => {
       usersRepository.findOne.mockResolvedValue({
         id: 1,
