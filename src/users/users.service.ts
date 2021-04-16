@@ -103,7 +103,8 @@ export class UserService {
       if (email) {
         user.email = email;
         user.verified = false;
-        // await this.verifications.delete({ user: { id: user.id } });
+        await this.verifications.delete({ user: { id: user.id } });
+
         const verification = await this.verifications.save(
           this.verifications.create({ user }),
         );
@@ -135,7 +136,7 @@ export class UserService {
       }
       return { ok: false, error: '認証対象を見つけませんでした。' };
     } catch (error) {
-      return { ok: false, error };
+      return { ok: false, error: 'メール認証に失敗しました。' };
     }
   }
 }
