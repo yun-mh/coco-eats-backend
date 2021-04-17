@@ -158,7 +158,6 @@ describe('UserService', () => {
 
     it('should fail if the password is wrong', async () => {
       const mockedUser = {
-        id: 1,
         checkPassword: jest.fn(() => Promise.resolve(false)),
       };
 
@@ -188,6 +187,17 @@ describe('UserService', () => {
       expect(result).toEqual({
         ok: true,
         token: 'signed-token',
+      });
+    });
+
+    it('should fail on exception', async () => {
+      usersRepository.findOne.mockRejectedValue(new Error());
+
+      const result = await service.login(loginArgs);
+
+      expect(result).toEqual({
+        ok: false,
+        error: 'ログインに失敗しました',
       });
     });
   });
